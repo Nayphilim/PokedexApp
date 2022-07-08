@@ -20,9 +20,10 @@
                 android:layout_height="wrap_content">
 
                 <ImageButton
-                    android:id="@+id/feedbackBackArrow"
+                    android:id="@+id/pokemonViewBackArrow"
                     android:layout_width="57dp"
                     android:layout_height="57dp"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
                     android:background="@color/white"
@@ -31,18 +32,51 @@
                     app:layout_constraintHorizontal_bias="0.975"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.01"
-                    app:srcCompat="@drawable/ic_back_arrow"
-                    android:layout_centerVertical="true"/>
+                    app:srcCompat="@drawable/ic_back_arrow" />
 
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/pokemonViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/topNav"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/pokemonViewName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true">
+                android:gravity="center"
+                android:text="Pokemon"
+                android:textColor="@color/black"
+                android:textSize="28dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/pokemonViewSprite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pokemonViewTitle"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/pokemonSpriteBox"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_centerHorizontal="true"
+                android:clickable="true"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </RelativeLayout>
 
     </RelativeLayout>
+
 
 </ScrollView>

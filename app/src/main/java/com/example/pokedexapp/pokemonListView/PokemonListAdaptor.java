@@ -42,16 +42,18 @@ public class PokemonListAdaptor extends RecyclerView.Adapter<PokemonListAdaptor.
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         final Pokemon pokemon = pokemonList.get(position);
-        Log.d("app", "Final list:\n\n\n" + pokemonList);
-        holder.nameTextView.setText(pokemon.getName());
-        holder.numberTextView.setText("#"+ pokemon.getId());
 
-        if (pokemon.getSprites() == null) {
-            holder.pokemonSpriteImageView.setVisibility(View.GONE);
-        } else {
-            holder.pokemonSpriteImageView.setVisibility(View.VISIBLE);
-            Glide.with(holder.pokemonSpriteImageView.getContext()).load(pokemon.getSprites().get("Male Front")).into(holder.pokemonSpriteImageView);
+        if (pokemon != null) {
+            holder.nameTextView.setText(pokemon.getName());
+            holder.numberTextView.setText("#" + pokemon.getId());
 
+            if (pokemon.getSprites() == null) {
+                holder.pokemonSpriteImageView.setVisibility(View.GONE);
+            } else {
+                holder.pokemonSpriteImageView.setVisibility(View.VISIBLE);
+                Glide.with(holder.pokemonSpriteImageView.getContext()).load(pokemon.getSprites().get("Male Front")).into(holder.pokemonSpriteImageView);
+
+            }
         }
 
 
@@ -64,16 +66,15 @@ public class PokemonListAdaptor extends RecyclerView.Adapter<PokemonListAdaptor.
 
     @Override
     public int getItemCount() {
-        if(pokemonList != null){
+        if (pokemonList != null) {
             return pokemonList.size();
-        }
-        else{
+        } else {
             return 0;
         }
 
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView nameTextView, numberTextView;
         ImageView pokemonSpriteImageView;
@@ -98,7 +99,7 @@ public class PokemonListAdaptor extends RecyclerView.Adapter<PokemonListAdaptor.
         }
     }
 
-    public interface OnPokemonClickListener{
+    public interface OnPokemonClickListener {
         void onPokemonClick(int position);
     }
 }
