@@ -2,6 +2,8 @@ package com.example.pokedexapp.pokemon;
 
 import android.graphics.Color;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.pokedexapp.R;
 
 import java.util.HashMap;
@@ -44,6 +46,10 @@ public enum PokemonType {
 
     public String toString() {
         return identifier;
+    }
+
+    public int getColour() {
+        return colour;
     }
 
     public static PokemonType get(final String identifier) {

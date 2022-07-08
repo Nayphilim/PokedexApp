@@ -98,6 +98,7 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
         });
     }
 
+    //WIP needs changing as this solution is slow and buggy
     private void loadMore() {
         pokemonList.add(null);
         pokemonListAdaptor.notifyItemInserted(pokemonList.size() - 1);

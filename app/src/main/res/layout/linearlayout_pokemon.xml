@@ -27,7 +27,8 @@
         android:paddingTop="4dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:gravity="center_horizontal"/>
+        android:gravity="center_horizontal"
+        android:fontFamily="@font/bold"/>
 
     <TextView
         android:id="@+id/textview_pokemon_number"
@@ -35,6 +36,7 @@
         android:layout_height="wrap_content"
         android:textSize="12sp"
         tools:text="#001"
-        android:gravity="center_horizontal"/>
+        android:gravity="center_horizontal"
+        android:fontFamily="@font/regular"/>
 
 </LinearLayout>
