@@ -76,6 +76,37 @@
 
         </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/pokemonViewStats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pokemonViewSprite"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical">
+
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:id="@+id/pokemonViewStatChart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginLeft="20dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/pokemonViewTypes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pokemonViewStats"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical">>
+
+            <GridView
+                android:id="@+id/pokemonViewTypeList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchMode="spacingWidthUniform"/>
+
+        </RelativeLayout>
     </RelativeLayout>
 
 
