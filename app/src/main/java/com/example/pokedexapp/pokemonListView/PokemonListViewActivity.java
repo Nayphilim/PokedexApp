@@ -30,7 +30,6 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
 
     private RecyclerView recyclerView;
     private ArrayList<Pokemon> pokemonList = new ArrayList<>();
-    private ArrayList<Pokemon> tempPokemonList = new ArrayList<>();
     private PokemonListAdaptor pokemonListAdaptor;
     private SearchView searchView;
 
@@ -57,6 +56,7 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                Log.d("app", "search: " + query);
                 SearchPokemonListTask searchPokemonListTask = new SearchPokemonListTask(getApplicationContext(), query);
                 searchPokemonListTask.execute();
                 return false;
@@ -67,6 +67,24 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
                 return false;
             }
         });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                pokemonListAdaptor.notifyItemRangeRemoved(0, pokemonList.size());
+                pokemonList.clear();
+                //needs optimizing. Instead store list before search and on close load that list
+                GetPokemonListTask getPokemonListTask = new GetPokemonListTask(getApplicationContext(), pokemonList.size());
+                getPokemonListTask.execute();
+                return false;
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     public void populatePokemonList(ArrayList<Pokemon> pokemonList) {
@@ -79,7 +97,6 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
 
     public void populatePokemonListFromSearch(Pokemon pokemon) {
         pokemonList.add(pokemon);
-        //pokemonListAdaptor.notifyItemRangeChanged(0, pokemonList.size());
         pokemonListAdaptor.notifyItemInserted(pokemonList.size());
     }
 
@@ -186,19 +203,18 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
             super.onPostExecute(pokemon);
             if (pokemon != null) {
                 //store current list so that we can quickly go back from search
-                tempPokemonList = pokemonList;
                 pokemonList.clear();
-                //pokemonListAdaptor.notifyItemRangeRemoved(0, pokemonList.size());
                 int matches = 0;
                 for (String name : pokemon) {
                     if (name.contains(search)) {
-                        Log.d("app", "match:" +matches);
+                        Log.d("app", "match:" + matches);
                         matches++;
                         GetPokemonTask getPokemonTask = new GetPokemonTask(getApplicationContext(), name);
                         getPokemonTask.execute();
-                        if(matches>50)break;
+                        //don't want to waste time getting too many matches for a short word search like 'po'
+                        if (matches > 50) break;
                     }
-                    //don't want to waste time getting too many matches for a short word search like 'mon'
+
                 }
             }
         }

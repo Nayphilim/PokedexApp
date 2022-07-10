@@ -47,6 +47,7 @@ public class PokeAPIBean {
                 }
                 JSONObject jsonObject = new JSONObject(responseStrBuilder.toString());
                 pokemonList = PokemonJsonParserBean.parsePokemonList(jsonObject);
+                connection.disconnect();
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -76,6 +77,7 @@ public class PokeAPIBean {
                     responseStrBuilder.append(inputStr);
                 }
                 pokemonJson = new JSONObject(responseStrBuilder.toString());
+                connection.disconnect();
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -104,6 +106,7 @@ public class PokeAPIBean {
                     responseStrBuilder.append(inputStr);
                 }
                 JSONObject pokemonJson = new JSONObject(responseStrBuilder.toString());
+                connection.disconnect();
                 return PokemonJsonParserBean.parsePokemon(pokemonJson);
             }
         } catch (MalformedURLException e) {
@@ -135,6 +138,7 @@ public class PokeAPIBean {
                     responseStrBuilder.append(inputStr);
                 }
                 JSONObject pokemonJson = new JSONObject(responseStrBuilder.toString());
+                connection.disconnect();
                 return PokemonJsonParserBean.parsePokemon(pokemonJson);
             }
         } catch (MalformedURLException e) {
@@ -150,7 +154,6 @@ public class PokeAPIBean {
     }
 
     public static ArrayList<String> getAllPokemonNames() {
-        ArrayList<String> pokemonNames = new ArrayList<>();
         final URL pokeApiEndpoint;
         try {
             pokeApiEndpoint = new URL("https://pokeapi.co/api/v2/pokemon?limit=10000");
@@ -171,6 +174,7 @@ public class PokeAPIBean {
                 JSONObject pokemonJson = new JSONObject();
                 pokemonJson.put("results", pokemonResults);
                 Log.d("app", pokemonJson.toString());
+                connection.disconnect();
                 return PokemonJsonParserBean.parsePokemonForNames(pokemonResults);
             }
         } catch (MalformedURLException e) {
