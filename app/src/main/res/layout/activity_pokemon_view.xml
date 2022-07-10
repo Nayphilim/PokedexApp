@@ -88,12 +88,18 @@
             android:layout_centerHorizontal="true"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/pokemonSpriteBox"
+            <com.synnapps.carouselview.CarouselView
+                android:id="@+id/pokemonViewSpriteBox"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
+                app:fillColor="#FFFFFFFF"
+                app:pageColor="#00000000"
+                app:radius="6dp"
+                app:slideInterval="0"
+                app:strokeColor="#FF777777"
+                app:strokeWidth="1dp"
                 android:layout_centerHorizontal="true"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
         </RelativeLayout>
 

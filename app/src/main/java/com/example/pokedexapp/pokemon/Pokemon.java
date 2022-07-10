@@ -8,7 +8,7 @@ public class Pokemon {
     private String name;
     private int height;
     private int id;
-    private Map<String,String> sprites;
+    private ArrayList<String> sprites;
     private int hp;
     private int attack;
     private int defense;
@@ -18,7 +18,7 @@ public class Pokemon {
     private ArrayList<PokemonType> pokemonTypes;
     private int weight;
 
-    public Pokemon(final int baseExperience,final String name,final int height,final int id,final Map<String, String> sprites,final int hp,final int attack,final int defense,final int specialAttack,final int specialDefense,final int speed,final ArrayList<PokemonType> pokemonTypes,final int weight) {
+    public Pokemon(final int baseExperience,final String name,final int height,final int id,final ArrayList<String> sprites,final int hp,final int attack,final int defense,final int specialAttack,final int specialDefense,final int speed,final ArrayList<PokemonType> pokemonTypes,final int weight) {
         this.baseExperience = baseExperience;
         this.name = name;
         this.height = height;
@@ -66,11 +66,11 @@ public class Pokemon {
         this.id = id;
     }
 
-    public Map<String, String> getSprites() {
+    public ArrayList<String> getSprites() {
         return sprites;
     }
 
-    public void setSprites(final Map<String, String> sprites) {
+    public void setSprites(final ArrayList<String> sprites) {
         this.sprites = sprites;
     }
 

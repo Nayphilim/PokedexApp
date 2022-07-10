@@ -55,7 +55,7 @@ public class PokemonListAdaptor extends RecyclerView.Adapter<PokemonListAdaptor.
                 holder.pokemonSpriteImageView.setVisibility(View.GONE);
             } else {
                 holder.pokemonSpriteImageView.setVisibility(View.VISIBLE);
-                Glide.with(holder.pokemonSpriteImageView.getContext()).load(pokemon.getSprites().get("Male Front")).into(holder.pokemonSpriteImageView);
+                Glide.with(holder.pokemonSpriteImageView.getContext()).load(pokemon.getSprites().get(0)).into(holder.pokemonSpriteImageView);
 
             }
         }

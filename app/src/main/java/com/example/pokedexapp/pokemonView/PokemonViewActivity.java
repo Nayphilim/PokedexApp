@@ -35,15 +35,19 @@ import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 public class PokemonViewActivity extends AppCompatActivity implements View.OnClickListener {
     private int pokemonId;
     private Pokemon chosenPokemon;
     private TextView pokemonName, pokemonIdTitle;
-    private ImageView pokemonSprite, backArrow;
+    private CarouselView pokemonSprite;
+    private ImageView backArrow;
     private HorizontalBarChart statChart;
     private RecyclerView typeList;
     ArrayList<PokemonType> types = new ArrayList<>();
@@ -56,11 +60,18 @@ public class PokemonViewActivity extends AppCompatActivity implements View.OnCli
 
         pokemonName = findViewById(R.id.pokemonViewName);
         pokemonIdTitle = findViewById(R.id.pokemonViewId);
-        pokemonSprite = findViewById(R.id.pokemonSpriteBox);
+        pokemonSprite = findViewById(R.id.pokemonViewSpriteBox);
         backArrow = findViewById(R.id.pokemonViewBackArrow);
         statChart = findViewById(R.id.pokemonViewStatChart);
         typeList = findViewById(R.id.pokemonViewTypeList);
 
+        //https://lobothijau.medium.com/create-carousel-easily-in-android-app-with-carouselview-6cbf5ef500a9
+        pokemonSprite.setImageListener(new ImageListener() {
+            @Override
+            public void setImageForPosition(int position, ImageView imageView) {
+                Glide.with(getApplicationContext()).load(chosenPokemon.getSprites().get(position)).into(imageView);
+            }
+        });
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 3);
         typeList.setLayoutManager(layoutManager);
@@ -179,6 +190,9 @@ public class PokemonViewActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    public void setSprites(ArrayList<String> sprites){
+        pokemonSprite.setPageCount(sprites.size());
+    }
 
     @Override
     public void onClick(View view) {
@@ -211,7 +225,7 @@ public class PokemonViewActivity extends AppCompatActivity implements View.OnCli
             chosenPokemon = pokemon;
             pokemonName.setText(chosenPokemon.getName());
             pokemonIdTitle.setText("#" + Integer.toString(chosenPokemon.getId()));
-            Glide.with(getApplicationContext()).load(chosenPokemon.getSprites().get("Male Front")).into(pokemonSprite);
+            setSprites(chosenPokemon.getSprites());
             setStats(pokemon.getHp(), pokemon.getAttack(), pokemon.getDefense(), pokemon.getSpecialAttack(), pokemon.getSpecialDefense(), pokemon.getSpeed());
             setTypes(pokemon.getPokemonTypes());
             //isLoading = true;
