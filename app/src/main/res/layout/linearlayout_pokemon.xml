@@ -6,7 +6,7 @@
     android:id="@+id/pokemon_view"
     >
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -16,7 +16,15 @@
             android:layout_height="100dp"
             android:scaleType="centerCrop"/>
 
-    </FrameLayout>
+        <ProgressBar
+            android:id="@+id/pokemon_list_item_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="invisible"/>
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/textview_pokemon_name"
@@ -39,5 +47,6 @@
         tools:text="#001"
         android:gravity="center_horizontal"
         android:fontFamily="@font/regular"/>
+
 
 </LinearLayout>

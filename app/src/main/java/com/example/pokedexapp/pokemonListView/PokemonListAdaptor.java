@@ -10,6 +10,7 @@ import android.widget.Filterable;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -59,8 +60,6 @@ public class PokemonListAdaptor extends RecyclerView.Adapter<PokemonListAdaptor.
 
             }
         }
-
-
     }
 
     @Override
@@ -91,6 +90,7 @@ public class PokemonListAdaptor extends RecyclerView.Adapter<PokemonListAdaptor.
 
             nameTextView = (TextView) itemView.findViewById(R.id.textview_pokemon_name);
             numberTextView = (TextView) itemView.findViewById(R.id.textview_pokemon_number);
+
 
             this.onPokemonClickListener = onPokemonClickListener;
 

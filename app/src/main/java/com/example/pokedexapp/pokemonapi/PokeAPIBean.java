@@ -32,7 +32,7 @@ public class PokeAPIBean {
     public static ArrayList<Pokemon> getPokemonList(final int offset) {
         ArrayList<Pokemon> pokemonList = new ArrayList<>();
         try {
-            final URL pokeApiEndpoint = new URL(POKE_ENDPOINT_URL + "pokemon/?limit=100&offset=" + offset);
+            final URL pokeApiEndpoint = new URL(POKE_ENDPOINT_URL + "pokemon/?limit=50&offset=" + offset);
             HttpsURLConnection connection =
                     (HttpsURLConnection) pokeApiEndpoint.openConnection();
             connection.setRequestProperty("User-Agent", "Pokedex App");
