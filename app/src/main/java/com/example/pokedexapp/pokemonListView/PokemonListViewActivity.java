@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.pokedexapp.R;
 import com.example.pokedexapp.pokemon.Pokemon;
@@ -32,6 +34,7 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
     private ArrayList<Pokemon> pokemonList = new ArrayList<>();
     private PokemonListAdaptor pokemonListAdaptor;
     private SearchView searchView;
+    private ProgressBar progressBar;
 
     private Boolean isLoading = true;
 
@@ -41,6 +44,7 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
         setContentView(R.layout.activity_main);
         recyclerView = this.findViewById(R.id.pokemon_list);
         searchView = this.findViewById(R.id.search_bar);
+        progressBar = this.findViewById(R.id.pokemon_list_progress_bar);
 
         //https://stackoverflow.com/questions/31759171/recyclerview-and-java-lang-indexoutofboundsexception-inconsistency-detected-in?page=1&tab=votes#tab-top
         RecyclerView.LayoutManager layoutManager = new WrapContentGridLayoutManager(this, 4);
@@ -48,6 +52,7 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
         pokemonListAdaptor = new PokemonListAdaptor(this, pokemonList, this);
         recyclerView.setAdapter(pokemonListAdaptor);
         pokemonListAdaptor.notifyDataSetChanged();
+        progressBar.setVisibility(View.VISIBLE);
         GetPokemonListTask getPokemonListTask = new GetPokemonListTask(this, pokemonList.size());
         getPokemonListTask.execute();
 
@@ -73,6 +78,7 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
             public boolean onClose() {
                 pokemonListAdaptor.notifyItemRangeRemoved(0, pokemonList.size());
                 pokemonList.clear();
+                progressBar.setVisibility(View.VISIBLE);
                 //needs optimizing. Instead store list before search and on close load that list
                 GetPokemonListTask getPokemonListTask = new GetPokemonListTask(getApplicationContext(), pokemonList.size());
                 getPokemonListTask.execute();
@@ -93,11 +99,13 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
             this.pokemonList.add(pokemon);
             pokemonListAdaptor.notifyItemInserted(pokemonList.size());
         }
+        progressBar.setVisibility(View.GONE);
     }
 
     public void populatePokemonListFromSearch(Pokemon pokemon) {
         pokemonList.add(pokemon);
         pokemonListAdaptor.notifyItemInserted(pokemonList.size());
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
