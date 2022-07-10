@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,7 +21,7 @@ import com.example.pokedexapp.pokemonapi.PokeAPIBean;
 
 import java.util.ArrayList;
 
-public class PokemonListAdaptor extends RecyclerView.Adapter<PokemonListAdaptor.MyViewHolder> {
+public class PokemonListAdaptor extends RecyclerView.Adapter<PokemonListAdaptor.MyViewHolder>{
     private final Context mContext;
     private ArrayList<Pokemon> pokemonList = new ArrayList<>();
     private OnPokemonClickListener onPokemonClickListener;

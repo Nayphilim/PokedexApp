@@ -14,6 +14,7 @@ import com.example.pokedexapp.pokemon.Pokemon;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,8 +30,9 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
 
     private RecyclerView recyclerView;
     private ArrayList<Pokemon> pokemonList = new ArrayList<>();
-    Handler pokemonListResultsHandler = new Handler();
+    private ArrayList<Pokemon> tempPokemonList = new ArrayList<>();
     private PokemonListAdaptor pokemonListAdaptor;
+    private SearchView searchView;
 
     private Boolean isLoading = true;
 
@@ -39,8 +41,10 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView = this.findViewById(R.id.pokemon_list);
+        searchView = this.findViewById(R.id.search_bar);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 4);
+        //https://stackoverflow.com/questions/31759171/recyclerview-and-java-lang-indexoutofboundsexception-inconsistency-detected-in?page=1&tab=votes#tab-top
+        RecyclerView.LayoutManager layoutManager = new WrapContentGridLayoutManager(this, 4);
         recyclerView.setLayoutManager(layoutManager);
         pokemonListAdaptor = new PokemonListAdaptor(this, pokemonList, this);
         recyclerView.setAdapter(pokemonListAdaptor);
@@ -49,14 +53,34 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
         getPokemonListTask.execute();
 
         initScrollListener();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                SearchPokemonListTask searchPokemonListTask = new SearchPokemonListTask(getApplicationContext(), query);
+                searchPokemonListTask.execute();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 
-    public void populatePokemonList(ArrayList<Pokemon> pokemonList){
+    public void populatePokemonList(ArrayList<Pokemon> pokemonList) {
         Log.d("app", pokemonList.toString());
-        for(Pokemon pokemon: pokemonList){
+        for (Pokemon pokemon : pokemonList) {
             this.pokemonList.add(pokemon);
             pokemonListAdaptor.notifyItemInserted(pokemonList.size());
         }
+    }
+
+    public void populatePokemonListFromSearch(Pokemon pokemon) {
+        pokemonList.add(pokemon);
+        //pokemonListAdaptor.notifyItemRangeChanged(0, pokemonList.size());
+        pokemonListAdaptor.notifyItemInserted(pokemonList.size());
     }
 
     @Override
@@ -81,7 +105,7 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
                 //https://stackoverflow.com/questions/26543131/how-to-implement-endless-list-with-recyclerview
                 super.onScrolled(recyclerView, dx, dy);
                 GridLayoutManager gridLayoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
-                if(dy > 0) {
+                if (dy > 0) {
                     int visibleItemCount = gridLayoutManager.getChildCount();
                     int totalItemCount = gridLayoutManager.getItemCount();
                     int pastVisiblesItems = gridLayoutManager.findFirstVisibleItemPosition();
@@ -117,14 +141,16 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
         }, 2000);
     }
 
+    //https://stackoverflow.com/questions/14539623/unable-to-start-activity-componentinfo
     public class GetPokemonListTask extends AsyncTask<Void, Integer, ArrayList<Pokemon>> {
         Context context;
         int offset;
 
-        public GetPokemonListTask(final Context context,final int offset){
+        public GetPokemonListTask(final Context context, final int offset) {
             this.context = context;
             this.offset = offset;
         }
+
         @Override
         protected ArrayList<Pokemon> doInBackground(Void... voids) {
             Log.d("app", "finding pokemon...");
@@ -140,4 +166,65 @@ public class PokemonListViewActivity extends AppCompatActivity implements Pokemo
         }
     }
 
+    public class SearchPokemonListTask extends AsyncTask<Void, Integer, ArrayList<String>> {
+        Context context;
+        String search;
+
+        public SearchPokemonListTask(final Context context, final String search) {
+            this.context = context;
+            this.search = search;
+        }
+
+        @Override
+        protected ArrayList<String> doInBackground(Void... voids) {
+            Log.d("app", "finding pokemon for search: " + search);
+            return PokeAPIBean.getAllPokemonNames();
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<String> pokemon) {
+            super.onPostExecute(pokemon);
+            if (pokemon != null) {
+                //store current list so that we can quickly go back from search
+                tempPokemonList = pokemonList;
+                pokemonList.clear();
+                //pokemonListAdaptor.notifyItemRangeRemoved(0, pokemonList.size());
+                int matches = 0;
+                for (String name : pokemon) {
+                    if (name.contains(search)) {
+                        Log.d("app", "match:" +matches);
+                        matches++;
+                        GetPokemonTask getPokemonTask = new GetPokemonTask(getApplicationContext(), name);
+                        getPokemonTask.execute();
+                        if(matches>50)break;
+                    }
+                    //don't want to waste time getting too many matches for a short word search like 'mon'
+                }
+            }
+        }
+    }
+
+
+    public class GetPokemonTask extends AsyncTask<String, Integer, Pokemon> {
+        Context context;
+        String name;
+
+        public GetPokemonTask(final Context context, final String name) {
+            this.context = context;
+            this.name = name;
+        }
+
+        @Override
+        protected Pokemon doInBackground(String... strings) {
+            return PokeAPIBean.getPokemonByName(name);
+        }
+
+        @Override
+        protected void onPostExecute(Pokemon pokemon) {
+            super.onPostExecute(pokemon);
+            if (pokemon != null) {
+                populatePokemonListFromSearch(pokemon);
+            }
+        }
+    }
 }

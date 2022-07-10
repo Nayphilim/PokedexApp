@@ -17,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -74,5 +75,30 @@ public class PokemonJsonParserBean{
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static ArrayList<String> parsePokemonForNames(JSONArray json){
+        ArrayList<String> pokemonList = new ArrayList<>();
+        try {
+//            Iterator<String> keys = json.keys();
+//            json = json.getJSONObject("results");
+//            Log.d("app", "test:" + json.toString());
+//            while(keys.hasNext()){
+//                String key = keys.next();
+//                Log.d("app", key);
+//                if(json.get(key) instanceof JSONObject){
+//                   pokemonList.add(json.getJSONObject(key).getString("name"));
+//                }
+//            }
+
+            for(int i=0;i< json.length();i++){
+                JSONObject pokemon = json.getJSONObject(i);
+                pokemonList.add(pokemon.getString("name"));
+            }
+            Log.d("app", "found " +pokemonList.size() +" pokemon:" + pokemonList);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return pokemonList;
     }
 }
